@@ -14,4 +14,4 @@ The kind of errors it will randomly produces are:
 
 It will basically annoy the hell out of anyone that has this installed.
 
-*Note: it will not interact with the inputs with the type parameter set to password, this is to allow any unknowing user to login anywhere*
+*Note: it will not interact with the inputs with the type parameter set to password, this is to allow any unknowing user to login anywhere.*
