@@ -1,53 +1,62 @@
-$(document).on("keypress", "input[type!='password'], textarea", function (event) {
-    if (Math.random() < 0.05) {
-        changeKey($(this), event.keyCode);
-        console.log(1);
-        return;
+//http://stackoverflow.com/questions/5203428/inserting-text-after-cursor-position-in-text-are/12815163#12815163
+jQuery.fn.extend({
+insertAtCaret: function(myValue, myValueE){
+  return this.each(function(i) {
+    if (document.selection) {
+      //For browsers like Internet Explorer
+      this.focus();
+      sel = document.selection.createRange();
+      sel.text = myValue + myValueE;
+      this.focus();
     }
-    if (Math.random() < 0.02) {
-        removeSpace($(this), event.keyCode);
-        console.log(2);
-        return;
+    else if (this.selectionStart || this.selectionStart == '0') {
+      //For browsers like Firefox and Webkit based
+      var startPos = this.selectionStart;
+      var endPos = this.selectionEnd;
+      var scrollTop = this.scrollTop;
+      this.value = this.value.substring(0,     startPos)+myValue+this.value.substring(startPos,endPos)+myValueE+this.value.substring(endPos,this.value.length);
+      this.focus();
+      this.selectionStart = startPos + myValue.length;
+      this.selectionEnd = ((startPos + myValue.length) + this.value.substring(startPos,endPos).length);
+      this.scrollTop = scrollTop;
+    } else {
+      this.value += myValue;
+      this.focus();
     }
-    if (Math.random() < 0.02) {
-        duplicateKey($(this), event.keyCode);
-        console.log(3);
-        return;
-    }
-    if (Math.random() < 0.02) {
-        missKey($(this), event.keyCode);
-        console.log(4);
-        return;
+  })
     }
 });
 
-function changeKey(obj, kc) {
-    if ((kc >= 65 && kc <= 90) || (kc >= 97 && kc <= 122)) {
-        event.preventDefault();
-        obj.insertAtCaret(moveKey[String.fromCharCode(event.keyCode)], "");
+$(document).on("keypress", "input[type!='password'], textarea", function (event) {
+    if ((event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 97 && event.keyCode <= 122)) {
+        if (Math.random() < 0.02) {
+            event.preventDefault();
+            $(this).insertAtCaret(moveKey[String.fromCharCode(event.keyCode)], "");
+            return;
+        }
     }
-}
-
-function removeSpace(obj, kc) {
-    if (kc === 32) {
-        event.preventDefault();
-        obj.insertAtCaret("", "");
+    if (event.keyCode === 32) {
+        if (Math.random() < 0.01) {        
+            event.preventDefault();
+            $(this).insertAtCaret("", "");
+        }
+        return;
     }
-}
-
-function duplicateKey(obj, kc) {
-    if ((kc >= 65 && kc <= 90) || (kc >= 97 && kc <= 122)) {
-        event.preventDefault();
-        obj.insertAtCaret(String.fromCharCode(event.keyCode) + String.fromCharCode(event.keyCode), "");
+    if ((event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 97 && event.keyCode <= 122)) {
+        if (Math.random() < 0.02) {
+            event.preventDefault();
+            $(this).insertAtCaret(String.fromCharCode(event.keyCode) + String.fromCharCode(event.keyCode), "");
+        }
+        return;
     }
-}
-
-function missKey(obj, kc) {
-    if ((kc >= 65 && kc <= 90) || (kc >= 97 && kc <= 122)) {
-        event.preventDefault();
-        obj.insertAtCaret("", "");
+    if ((event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 97 && event.keyCode <= 122)) {
+        if (Math.random() < 0.02) {
+            event.preventDefault();
+            $(this).insertAtCaret("", "");
+        }
+        return;
     }
-}
+});
 
 var moveKey = {
     "q": "w",
